@@ -1,4 +1,5 @@
 const User = require('../models/User');
+const jwt = require('jsonwebtoken');
 
 // handling errors
 const handleErrors = (err) => {
@@ -30,6 +31,10 @@ const handleErrors = (err) => {
   return errors;
 };
 
+const createToken = (id) => {
+    return jwt.sign({id}, 'net ninja secret');
+};
+
 const signup = (req, res) => {
     res.render('signup');
 };
@@ -43,10 +48,13 @@ const signup_post = async (req, res) => {
 
     try {
       const user = await User.create({ email, password });
+      const token = createToken(user._id);
+      res.cookie('jwt', token, { httpOnly: true });
       res.status(201).json({user});
     }
     catch(err) {
-      res.status(400).json({err});
+      const error = handleErrors(err);
+      res.status(400).json({error});
     }
 };
 
@@ -58,7 +66,8 @@ const login_post = (req, res) => {
     } 
     
     catch (err) {
-        
+        const error = handleErrors(err);
+        res.status(400).json({error});
     }
 };
 
