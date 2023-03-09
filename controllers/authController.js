@@ -1,9 +1,9 @@
 const signup = (req, res) => {
-    res.send('Signup page');
+    res.render('signup');
 };
 
 const login = (req, res) => {
-    res.send('login page');
+    res.render('login');
 };
 
 const signup_post = (req, res) => {

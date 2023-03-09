@@ -3,6 +3,9 @@ const app = express();
 const routes = require('./routes/authRoutes');
 const PORT = 3000;
 
+app.set('view engine', 'ejs');
+app.use(express.static('public'));
+
 app.get('/', (req, res) => { res.send('Welcome to this page.')});
 app.use(routes);
 
