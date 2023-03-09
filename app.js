@@ -7,6 +7,7 @@ db.database();
 
 app.set('view engine', 'ejs');
 app.use(express.static('public'));
+app.use(express.json())
 
 app.get('/', (req, res) => { res.send('Welcome to this page.')});
 app.use(routes);
