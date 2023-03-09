@@ -58,11 +58,14 @@ const signup_post = async (req, res) => {
     }
 };
 
-const login_post = (req, res) => {
+const login_post = async(req, res) => {
     const { email, password } = req.body;
 
     try {
-        
+      const user = await User.login(email, password);
+      const token = createToken(user._id);
+      res.cookie('jwt', token, { httpOnly: true });
+      res.status(200).json({ user});
     } 
     
     catch (err) {

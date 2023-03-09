@@ -17,13 +17,25 @@ const userSchema = new mongoose.Schema({
   }
 });
 
-
 // fire a function before doc saved to db
 userSchema.pre('save', async function(next) {
   const salt = await bcrypt.genSalt();
   this.password = await bcrypt.hash(this.password, salt);
   next();
 });
+
+// login user
+userSchema.statics.login = async function(email, password) {
+  const user = await User.findOne({ email });
+  if(user) {
+    const auth = await bcrypt.compare(password, user.password);
+    if(auth) {
+      return auth;
+    }
+    throw Error('incorrect password');
+  }
+  throw Error('incorrect email');
+}
 
 const User = mongoose.model('user', userSchema);
 module.exports = User;
